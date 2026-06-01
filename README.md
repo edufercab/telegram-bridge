@@ -69,58 +69,27 @@ When Claude is not connected, the bot replies **"Claude is not available right n
 
 ## Quickstart
 
-### 1. Prerequisites
-
-- Node.js ≥ 20 ([nvm](https://github.com/nvm-sh/nvm): `nvm install 20`)
-- pnpm (`npm install -g pnpm`)
-- A Telegram account
-
-### 2. Create your bot
-
-1. Open Telegram → search **@BotFather**
-2. Send `/newbot`, follow the prompts
-3. Copy the token — you'll need it shortly
-
-### 3. Clone and install
-
 ```bash
 git clone https://github.com/edufercab/telegram-bridge.git ~/telegram-bridge
 cd ~/telegram-bridge
 pnpm install
+pnpm setup      # interactive wizard — handles everything below automatically
 ```
 
-### 4. Configure
+The wizard will:
+- Generate a secure API key
+- Validate your bot token with Telegram
+- **Auto-detect your Chat ID** — just send any message to your bot when prompted
+- Write `.env` with mode 600
+- Build the project
+- Add env vars to your shell profile (`~/.bashrc` / `~/.zshrc`)
+- Patch `~/.claude/CLAUDE.md` with the bridge instructions for Claude
+- Optionally generate a systemd service file for autostart
+
+Then start the server:
 
 ```bash
-cp .env.example .env
-```
-
-Edit `.env`:
-
-```env
-API_KEY=          # openssl rand -hex 32
-TELEGRAM_BOT_TOKEN=   # from BotFather
-TELEGRAM_CHAT_ID=     # see step 5
-PORT=3001
-SESSION_TIMEOUT_MINUTES=30
-```
-
-### 5. Get your Chat ID
-
-Start the server temporarily, send any message to your bot from Telegram, then:
-
-```bash
-pnpm dev &
-curl "https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates" | jq '.result[0].message.chat.id'
-```
-
-Copy that number into `TELEGRAM_CHAT_ID` in `.env`, then restart.
-
-### 6. Run
-
-```bash
-pnpm dev        # development (hot-reload)
-pnpm build && pnpm start   # production
+pnpm start
 ```
 
 Check it's alive:
