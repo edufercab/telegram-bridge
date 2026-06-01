@@ -62,11 +62,15 @@ interface T {
 
   // Step 3
   botTokenInstructions: string
+  botTokenExample: string
   pasteBotToken: string
   tokenCannotBeEmpty: string
+  tokenFormatWarning: string
   validatingToken: string
   botVerified: (username: string) => string
   tokenRejected: string
+  configuringBot: string
+  botConfigured: string
 
   // Step 4
   chatIdInstructions: (username: string) => string
@@ -130,11 +134,15 @@ const translations: Record<Lang, T> = {
     generatingApiKey: 'Generating a secure 32-byte API key...',
     apiKeyGenerated: 'API_KEY generated',
     botTokenInstructions: 'Open Telegram → search @BotFather → send /newbot → copy the token.',
+    botTokenExample: 'Example: 110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw',
     pasteBotToken: 'Paste your bot token',
     tokenCannotBeEmpty: 'Token cannot be empty.',
+    tokenFormatWarning: 'This doesn\'t look like a bot token (expected: 123456789:ABC…). Trying anyway…',
     validatingToken: 'Validating token with Telegram API…',
     botVerified: (u) => `Bot @${u} verified`,
     tokenRejected: 'Token rejected by Telegram. Check for typos and try again.',
+    configuringBot: 'Setting bot name and description…',
+    botConfigured: 'Bot profile configured',
     chatIdInstructions: (u) => `Open Telegram, find your bot @${u}, and send it any message.`,
     waitingForMessage: 'Waiting up to 2 minutes…',
     timedOut: 'Timed out waiting for a message.',
@@ -187,11 +195,15 @@ const translations: Record<Lang, T> = {
     generatingApiKey: 'Generando una clave API segura de 32 bytes...',
     apiKeyGenerated: 'API_KEY generada',
     botTokenInstructions: 'Abre Telegram → busca @BotFather → envía /newbot → copia el token.',
+    botTokenExample: 'Ejemplo: 110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw',
     pasteBotToken: 'Pega tu token del bot',
     tokenCannotBeEmpty: 'El token no puede estar vacío.',
+    tokenFormatWarning: 'Esto no parece un token de bot (formato esperado: 123456789:ABC…). Intentando igualmente…',
     validatingToken: 'Validando token con la API de Telegram…',
     botVerified: (u) => `Bot @${u} verificado`,
     tokenRejected: 'Token rechazado por Telegram. Revisa si hay errores tipográficos.',
+    configuringBot: 'Configurando nombre y descripción del bot…',
+    botConfigured: 'Perfil del bot configurado',
     chatIdInstructions: (u) => `Abre Telegram, busca tu bot @${u} y envíale cualquier mensaje.`,
     waitingForMessage: 'Esperando hasta 2 minutos…',
     timedOut: 'Tiempo de espera agotado.',
@@ -244,11 +256,15 @@ const translations: Record<Lang, T> = {
     generatingApiKey: '正在生成 32 字节安全 API 密钥...',
     apiKeyGenerated: 'API_KEY 已生成',
     botTokenInstructions: '打开 Telegram → 搜索 @BotFather → 发送 /newbot → 复制令牌。',
+    botTokenExample: '示例：110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw',
     pasteBotToken: '粘贴你的机器人令牌',
     tokenCannotBeEmpty: '令牌不能为空。',
+    tokenFormatWarning: '这看起来不像机器人令牌（预期格式：123456789:ABC…）。仍将尝试…',
     validatingToken: '正在通过 Telegram API 验证令牌…',
     botVerified: (u) => `机器人 @${u} 验证成功`,
     tokenRejected: 'Telegram 拒绝了该令牌，请检查是否有拼写错误。',
+    configuringBot: '正在设置机器人名称和简介…',
+    botConfigured: '机器人资料已配置',
     chatIdInstructions: (u) => `打开 Telegram，找到你的机器人 @${u}，向它发送任意消息。`,
     waitingForMessage: '等待最长 2 分钟…',
     timedOut: '等待消息超时。',
@@ -301,11 +317,15 @@ const translations: Record<Lang, T> = {
     generatingApiKey: '32-बाइट सुरक्षित API कुंजी बना रहे हैं...',
     apiKeyGenerated: 'API_KEY बन गई',
     botTokenInstructions: 'Telegram खोलें → @BotFather खोजें → /newbot भेजें → टोकन कॉपी करें।',
+    botTokenExample: 'उदाहरण: 110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw',
     pasteBotToken: 'अपना bot टोकन पेस्ट करें',
     tokenCannotBeEmpty: 'टोकन खाली नहीं हो सकता।',
+    tokenFormatWarning: 'यह bot टोकन जैसा नहीं दिखता (अपेक्षित: 123456789:ABC…)। फिर भी प्रयास कर रहे हैं…',
     validatingToken: 'Telegram API से टोकन सत्यापित किया जा रहा है…',
     botVerified: (u) => `Bot @${u} सत्यापित हो गया`,
     tokenRejected: 'Telegram ने टोकन अस्वीकार कर दिया। टाइपिंग की गलतियाँ जाँचें।',
+    configuringBot: 'Bot का नाम और विवरण सेट किया जा रहा है…',
+    botConfigured: 'Bot प्रोफ़ाइल कॉन्फ़िगर हो गया',
     chatIdInstructions: (u) => `Telegram खोलें, अपना bot @${u} ढूँढें और उसे कोई भी संदेश भेजें।`,
     waitingForMessage: '2 मिनट तक प्रतीक्षा कर रहे हैं…',
     timedOut: 'संदेश की प्रतीक्षा में समय समाप्त।',
@@ -358,11 +378,15 @@ const translations: Record<Lang, T> = {
     generatingApiKey: 'جارٍ توليد مفتاح API آمن من 32 بايت...',
     apiKeyGenerated: 'تم توليد API_KEY',
     botTokenInstructions: 'افتح Telegram ← ابحث عن @BotFather ← أرسل /newbot ← انسخ الرمز.',
+    botTokenExample: 'مثال: 110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw',
     pasteBotToken: 'الصق رمز البوت',
     tokenCannotBeEmpty: 'لا يمكن أن يكون الرمز فارغاً.',
+    tokenFormatWarning: 'لا يبدو هذا رمز بوت صحيحاً (الصيغة المتوقعة: 123456789:ABC…). جارٍ المحاولة على أي حال…',
     validatingToken: 'جارٍ التحقق من الرمز عبر Telegram API…',
     botVerified: (u) => `تم التحقق من البوت @${u}`,
     tokenRejected: 'رفض Telegram الرمزَ. تحقق من عدم وجود أخطاء إملائية.',
+    configuringBot: 'جارٍ ضبط اسم البوت ووصفه…',
+    botConfigured: 'تم ضبط ملف البوت',
     chatIdInstructions: (u) => `افتح Telegram، ابحث عن البوت @${u} وأرسل له أي رسالة.`,
     waitingForMessage: 'في انتظار رسالة (مدة أقصاها دقيقتان)…',
     timedOut: 'انتهت مهلة الانتظار.',
@@ -415,11 +439,15 @@ const translations: Record<Lang, T> = {
     generatingApiKey: 'Génération d\'une clé API sécurisée de 32 octets...',
     apiKeyGenerated: 'API_KEY générée',
     botTokenInstructions: 'Ouvrez Telegram → cherchez @BotFather → envoyez /newbot → copiez le token.',
+    botTokenExample: 'Exemple : 110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw',
     pasteBotToken: 'Collez votre token de bot',
     tokenCannotBeEmpty: 'Le token ne peut pas être vide.',
+    tokenFormatWarning: 'Ceci ne ressemble pas à un token de bot (attendu : 123456789:ABC…). Tentative quand même…',
     validatingToken: 'Validation du token via l\'API Telegram…',
     botVerified: (u) => `Bot @${u} vérifié`,
     tokenRejected: 'Token rejeté par Telegram. Vérifiez les fautes de frappe.',
+    configuringBot: 'Configuration du nom et de la description du bot…',
+    botConfigured: 'Profil du bot configuré',
     chatIdInstructions: (u) => `Ouvrez Telegram, trouvez votre bot @${u} et envoyez-lui n'importe quel message.`,
     waitingForMessage: 'Attente jusqu\'à 2 minutes…',
     timedOut: 'Délai d\'attente dépassé.',
@@ -515,11 +543,35 @@ async function tgGet<T>(token: string, method: string, params: Record<string, st
   return res.json() as Promise<TgResponse<T>>
 }
 
+const BOT_TOKEN_RE = /^\d{8,12}:[A-Za-z0-9_-]{35,}$/
+
+function looksLikeBotToken(token: string): boolean {
+  return BOT_TOKEN_RE.test(token)
+}
+
 async function validateBotToken(token: string): Promise<{ valid: boolean; username?: string }> {
   try {
     const res = await tgGet<{ username: string }>(token, 'getMe')
     return res.ok && res.result ? { valid: true, username: res.result.username } : { valid: false }
   } catch { return { valid: false } }
+}
+
+async function configureBot(token: string): Promise<void> {
+  const name = 'Claude Bridge'
+  const description = [
+    '⚡ Claude Code bridge — stay in the loop while Claude works.',
+    '',
+    'Claude connects when it starts a task, sends you progress updates, reads your replies, and disconnects when done.',
+    '',
+    'When Claude is not active, this bot stays silent. 🔴',
+  ].join('\n')
+  const shortDescription = 'Get Telegram updates from Claude Code while it works on your machine.'
+
+  await Promise.allSettled([
+    tgGet(token, 'setMyName', { name }),
+    tgGet(token, 'setMyDescription', { description }),
+    tgGet(token, 'setMyShortDescription', { short_description: shortDescription }),
+  ])
 }
 
 async function detectChatId(token: string, timeoutSeconds = 120): Promise<number | null> {
@@ -574,12 +626,27 @@ const CLAUDE_MD_MARKER = '## Telegram Bridge'
 
 function buildClaudeMdBlock(installDir: string): string {
   const cliPath = path.join(installDir, 'claude-sdk', 'dist', 'cli.js')
+  const serverPath = path.join(installDir, 'dist', 'index.js')
   return `
 ## Telegram Bridge
 
 A local bridge at \`${installDir}\` lets you send updates to the user via Telegram and read their replies bidirectionally.
 
 **Activate only when the user explicitly asks you to connect.**
+
+### Starting the server
+
+Always check if the server is running before connecting. If it is not, start it:
+
+\`\`\`bash
+# Check
+curl -s http://localhost:3001/health | grep -q '"status":"ok"' && echo running || echo stopped
+
+# Start in background if stopped
+nohup node ${serverPath} >> ${installDir}/server.log 2>&1 &
+\`\`\`
+
+Wait 2 seconds after starting, then verify with the health check before proceeding.
 
 ### CLI
 
@@ -599,13 +666,14 @@ node ${cliPath} <command>
 
 ### Workflow
 
-1. \`connect\` → sends "🟢 Claude connected." to the user
-2. Work autonomously; call \`send\` at key milestones
-3. Call \`inbox\` periodically to check for user replies
-4. Call \`read <id>\` to acknowledge each message
-5. \`disconnect\` when done
+1. Check server is running (start it if not)
+2. \`connect\` → sends "🟢 Claude connected." to the user
+3. Work autonomously; call \`send\` at key milestones
+4. Call \`inbox\` before each response to check for user input
+5. Call \`read <id>\` to acknowledge each message
+6. \`disconnect\` when done → sends "🔴 Session closed."
 
-**Disconnect triggers**: inbox message containing "stop", "disconnect", "bye", "pause".
+**Disconnect triggers**: inbox message containing "stop", "disconnect", "bye", or "pause".
 `
 }
 
@@ -702,6 +770,7 @@ ${c.reset}`)
   // ── Step 3: Bot Token ──────────────────────────────────────────────────────
   step(3, TOTAL, t.stepBotToken)
   info(t.botTokenInstructions)
+  info(t.botTokenExample)
   info('')
 
   let botToken = ''
@@ -709,10 +778,19 @@ ${c.reset}`)
   while (true) {
     botToken = await ask(t.pasteBotToken)
     if (!botToken) { fail(t.tokenCannotBeEmpty); continue }
+    if (!looksLikeBotToken(botToken)) warn(t.tokenFormatWarning)
     process.stdout.write(`  ${c.dim}${t.validatingToken}${c.reset}\r`)
     const check = await validateBotToken(botToken)
     process.stdout.write(' '.repeat(70) + '\r')
-    if (check.valid) { botUsername = check.username ?? 'unknown'; ok(t.botVerified(botUsername)); break }
+    if (check.valid) {
+      botUsername = check.username ?? 'unknown'
+      ok(t.botVerified(botUsername))
+      process.stdout.write(`  ${c.dim}${t.configuringBot}${c.reset}\r`)
+      await configureBot(botToken)
+      process.stdout.write(' '.repeat(70) + '\r')
+      ok(t.botConfigured)
+      break
+    }
     fail(t.tokenRejected)
   }
 

@@ -73,7 +73,7 @@ When Claude is not connected, the bot replies **"Claude is not available right n
 git clone https://github.com/edufercab/telegram-bridge.git ~/telegram-bridge
 cd ~/telegram-bridge
 pnpm install
-pnpm setup      # interactive wizard — handles everything below automatically
+pnpm wizard     # interactive wizard — handles everything below automatically
 ```
 
 The wizard will:
