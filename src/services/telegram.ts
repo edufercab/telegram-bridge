@@ -3,32 +3,35 @@ import { Telegraf } from 'telegraf'
 import { env } from '../lib/env'
 import { TelegramError } from '../lib/errors'
 import { markdownToHtml } from '../lib/formatter'
+import { getBotMessages } from '../lib/i18n'
 import * as db from '../db'
 
 export const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
 
+const msg = getBotMessages(env.LANGUAGE)
+
 bot.on('message', async (ctx) => {
   if (ctx.chat.id !== env.TELEGRAM_CHAT_ID) {
-    await ctx.reply('Unauthorized.')
+    await ctx.reply(msg.unauthorized)
     return
   }
 
   const session = db.getSession()
 
   if (!session.active) {
-    await ctx.reply('Claude is not available right now. 🔴')
+    await ctx.reply(msg.notAvailable)
     return
   }
 
   const text = 'text' in ctx.message ? ctx.message.text : null
   if (!text) {
-    await ctx.reply('Only text messages are supported.')
+    await ctx.reply(msg.textOnly)
     return
   }
 
   db.insertMessage(ctx.message.message_id, ctx.from?.username ?? null, text)
   db.touchSession()
-  await ctx.reply('Message received ✓')
+  await ctx.reply(msg.messageReceived)
 })
 
 export async function sendMessage(

@@ -7,6 +7,7 @@ const schema = z.object({
   PORT: z.coerce.number().int().min(1024).max(65535).default(3001),
   SESSION_TIMEOUT_MINUTES: z.coerce.number().int().min(1).max(1440).default(30),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  LANGUAGE: z.enum(['en', 'es', 'zh', 'hi', 'ar', 'fr']).default('en'),
 })
 
 const result = schema.safeParse(process.env)
