@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./claude-sdk",
+    "outDir": "./claude-sdk/dist"
+  },
+  "include": ["claude-sdk/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
