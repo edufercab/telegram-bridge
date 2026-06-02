@@ -20,7 +20,8 @@ export const sendRoute = new Hono().post('/', async (c) => {
     throw new ValidationError(parsed.error.issues[0]?.message ?? 'Validation failed')
   }
 
-  const { text, format } = parsed.data
+  const { format } = parsed.data
+  const text = parsed.data.text.replace(/%0D%0A/gi, '\n').replace(/%0[AD]/gi, '\n')
   const formatted = format === 'html' ? markdownToHtml(text) : text
   const chunks = splitMessage(formatted)
 

@@ -21,7 +21,8 @@ export const sendPhotoRoute = new Hono().post('/', async (c) => {
     throw new ValidationError(parsed.error.issues[0]?.message ?? 'Validation failed')
   }
 
-  const { source, caption } = parsed.data
+  const { source } = parsed.data
+  const caption = parsed.data.caption?.replace(/%0D%0A/gi, '\n').replace(/%0[AD]/gi, '\n')
   const isUrl = source.startsWith('http://') || source.startsWith('https://')
 
   if (isUrl) {
