@@ -184,7 +184,7 @@ Every response follows `{ success: boolean, data?: ..., error?: { code, message 
 { "text": "Your message here", "format": "html" }
 ```
 
-- `format`: `"html"` (default, converts markdown to Telegram HTML) or `"plain"`
+- `format`: `"html"` (default, converts markdown to Telegram HTML), `"rawhtml"` (sends HTML as-is, no conversion), or `"plain"`
 - Messages longer than 4000 chars are split automatically
 
 #### POST /send-photo

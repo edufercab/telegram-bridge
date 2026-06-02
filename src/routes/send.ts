@@ -7,7 +7,7 @@ import * as db from '../db'
 
 const bodySchema = z.object({
   text: z.string().min(1).max(20_000),
-  format: z.enum(['html', 'plain']).default('html'),
+  format: z.enum(['html', 'plain', 'rawhtml']).default('html'),
 })
 
 export const sendRoute = new Hono().post('/', async (c) => {
@@ -26,7 +26,7 @@ export const sendRoute = new Hono().post('/', async (c) => {
 
   let lastMessageId = 0
   for (const chunk of chunks) {
-    lastMessageId = await sendMessage(chunk, format === 'html' ? 'HTML' : 'plain')
+    lastMessageId = await sendMessage(chunk, format !== 'plain' ? 'HTML' : 'plain')
   }
 
   db.touchSession()
