@@ -57,7 +57,7 @@ async function main(): Promise<void> {
     }
 
     case 'send': {
-      const text = args.join(' ')
+      const text = args.join(' ').replace(/%0D%0A/gi, '\n').replace(/%0[AD]/gi, '\n')
       if (!text) die('Usage: cli send "message text"')
       const data = await request<{ telegram_message_id: number; chunks_sent: number }>('/send', {
         method: 'POST',
@@ -70,7 +70,7 @@ async function main(): Promise<void> {
 
     case 'send-photo': {
       const source = args[0]
-      const caption = args.slice(1).join(' ') || undefined
+      const caption = (args.slice(1).join(' ') || undefined)?.replace(/%0D%0A/gi, '\n').replace(/%0[AD]/gi, '\n')
       if (!source) die('Usage: cli send-photo <path-or-url> ["optional caption"]')
       const data = await request<{ telegram_message_id: number }>('/send-photo', {
         method: 'POST',
