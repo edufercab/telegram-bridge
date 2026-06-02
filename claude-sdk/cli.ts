@@ -57,11 +57,13 @@ async function main(): Promise<void> {
     }
 
     case 'send': {
+      const formatIdx = args.indexOf('--format')
+      const format = formatIdx !== -1 ? args.splice(formatIdx, 2)[1] : undefined
       const text = args.join(' ').replace(/%0D%0A/gi, '\n').replace(/%0[AD]/gi, '\n')
-      if (!text) die('Usage: cli send "message text"')
+      if (!text) die('Usage: cli send "message text" [--format html|rawhtml|plain]')
       const data = await request<{ telegram_message_id: number; chunks_sent: number }>('/send', {
         method: 'POST',
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, ...(format && { format }) }),
       })
       if (!data.success) die(data.error?.message ?? 'Failed to send message')
       console.log(`Sent (msg_id: ${data.data?.telegram_message_id}, parts: ${data.data?.chunks_sent})`)

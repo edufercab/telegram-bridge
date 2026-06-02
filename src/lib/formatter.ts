@@ -18,7 +18,18 @@ export function markdownToHtml(text: string): string {
     return `\x00INLINE_CODE_${inlineCodes.length - 1}\x00`
   })
 
+  // Protect existing HTML tags before escaping so they survive intact
+  const htmlTags: string[] = []
+  result = result.replace(/<\/?[a-zA-Z][^>]*>/g, (tag) => {
+    htmlTags.push(tag)
+    return `\x00HTML_TAG_${htmlTags.length - 1}\x00`
+  })
+
   result = escapeHtml(result)
+
+  htmlTags.forEach((tag, i) => {
+    result = result.replace(`\x00HTML_TAG_${i}\x00`, tag)
+  })
 
   result = result
     .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
