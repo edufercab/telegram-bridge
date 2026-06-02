@@ -72,7 +72,8 @@ export async function sendPhoto(source: string, caption?: string): Promise<numbe
 }
 
 export async function startBot(): Promise<void> {
-  await bot.launch()
+  bot.launch().catch((err) => console.error('Bot launch error:', err))
+  await new Promise((resolve) => setTimeout(resolve, 2000))
   console.log('Telegram bot connected and polling')
 }
 

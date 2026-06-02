@@ -296,6 +296,18 @@ telegram-bridge is for a different workflow: **Claude is already running a long 
 
 ---
 
+## Troubleshooting
+
+**`better-sqlite3` native binding not found after install**
+
+This can happen in WSL2 or when using nvm, where the installed binary doesn't match the active Node.js version.
+
+```bash
+npm rebuild better-sqlite3 --prefix ~/telegram-bridge
+```
+
+---
+
 ## Contributing
 
 Issues and PRs welcome. Please keep changes focused — one concern per PR.

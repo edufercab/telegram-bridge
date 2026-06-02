@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc && tsc --project tsconfig.sdk.json",
+    "build": "tsc && tsc --project tsconfig.sdk.json && cp src/db/schema.sql dist/db/schema.sql",
     "start": "node dist/index.js",
     "wizard": "tsx scripts/setup.ts",
     "typecheck": "tsc --noEmit && tsc --noEmit --project tsconfig.sdk.json"
