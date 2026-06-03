@@ -5,6 +5,8 @@ import { TelegramError } from '../lib/errors'
 import { markdownToHtml } from '../lib/formatter'
 import { getBotMessages } from '../lib/i18n'
 import * as db from '../db'
+import { bridgeEvents } from '../lib/events'
+import type { InboxEvent } from '../lib/events'
 
 export const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
 
@@ -29,8 +31,16 @@ bot.on('message', async (ctx) => {
     return
   }
 
-  db.insertMessage(ctx.message.message_id, ctx.from?.username ?? null, text)
+  const id = db.insertMessage(ctx.message.message_id, ctx.from?.username ?? null, text)
   db.touchSession()
+  const event: InboxEvent = {
+    id,
+    telegram_message_id: ctx.message.message_id,
+    from_username: ctx.from?.username ?? null,
+    message: text,
+    created_at: new Date().toISOString(),
+  }
+  bridgeEvents.emit('inbox:message', event)
   await ctx.reply(msg.messageReceived)
 })
 

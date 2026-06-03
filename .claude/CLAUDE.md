@@ -7,41 +7,37 @@ This repo is a local bridge between Claude Code and Telegram. Claude controls th
 Always check if the server is running before connecting. If it is not, start it:
 
 ```bash
-# Check
-curl -s http://localhost:3001/health | grep -q '"status":"ok"' && echo running || echo stopped
-
-# Start in background if stopped (from repo root)
-nohup node dist/index.js >> server.log 2>&1 &
+tb start
 ```
-
-Wait 2 seconds after starting, then verify with the health check before proceeding.
 
 ## CLI
 
 ```bash
-node claude-sdk/dist/cli.js <command>
+tb <command>
 ```
 
 | Command | What it does |
 |---------|-------------|
-| `status` | Check server and session state |
-| `connect` | Start session — bot becomes active |
-| `disconnect` | End session — bot goes silent |
-| `send "text"` | Send a message to the user on Telegram |
-| `send-photo <path\|url> ["caption"]` | Send an image |
-| `inbox` | Read queued messages from the user (JSON) |
-| `read <id>` | Mark a message as read |
+| `tb status` | Check server and session state |
+| `tb connect` | Start session — bot becomes active |
+| `tb disconnect` | End session — bot goes silent |
+| `tb send "text"` | Send a message to the user on Telegram |
+| `tb send-photo <path\|url> ["caption"]` | Send an image |
+| `tb inbox` | Read queued messages from the user (JSON) |
+| `tb wait` | Block until a new message arrives (use with Monitor tool) |
+| `tb read <id>` | Mark a message as read |
+| `tb stop` | Stop the server |
 
 The CLI reads `TELEGRAM_BRIDGE_URL` and `TELEGRAM_BRIDGE_API_KEY` from the environment (set by the wizard in `~/.bashrc` / `~/.zshrc`).
 
 ## Workflow
 
-1. Check server is running (start it if not)
-2. `connect` → user receives "🟢 Claude connected."
-3. Work on the task; call `send` at key milestones
-4. Call `inbox` before each response to check for user input
-5. Call `read <id>` to acknowledge each message
-6. `disconnect` when done → user receives "🔴 Session closed."
+1. `tb start` — start the server if not running
+2. `tb connect` — user receives "🟢 Claude connected."
+3. Launch a persistent inbox monitor — run `tb wait` in the background and attach the Monitor tool to it. This must stay running for the entire session so incoming Telegram messages are pushed to Claude automatically without polling.
+4. Work on the task; call `tb send` at key milestones
+5. When Monitor fires (a message arrived): call `tb read <id>` to acknowledge it, then act on the message
+6. `tb disconnect` when done → user receives "🔴 Session closed."
 
 **Disconnect triggers**: inbox message containing "stop", "disconnect", "bye", or "pause".
 

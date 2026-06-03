@@ -75,8 +75,9 @@ export function insertMessage(
   telegramMessageId: number,
   fromUsername: string | null,
   message: string,
-): void {
-  stmts.insertMessage.run(telegramMessageId, fromUsername, message)
+): number {
+  const result = stmts.insertMessage.run(telegramMessageId, fromUsername, message)
+  return result.lastInsertRowid as number
 }
 
 export function getUnreadMessages(): InboxMessage[] {

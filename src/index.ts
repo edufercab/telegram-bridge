@@ -55,6 +55,11 @@ setInterval(async () => {
 }, EXPIRY_CHECK_INTERVAL_MS)
 
 async function main() {
+  if (db.getSession().active === 1) {
+    db.endSession()
+    console.log('Stale session cleared on startup')
+  }
+
   await startBot()
 
   serve({ fetch: app.fetch, port: env.PORT }, () => {

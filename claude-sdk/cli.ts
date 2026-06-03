@@ -95,6 +95,29 @@ async function main(): Promise<void> {
       break
     }
 
+    case 'wait': {
+      const res = await fetch(`${BASE_URL}/inbox/stream`, { headers })
+      if (!res.ok || !res.body) die('Failed to connect to inbox stream')
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() ?? ''
+        for (const line of lines) {
+          if (line.startsWith('data: ') && line.length > 6) {
+            console.log(line.slice(6))
+            await reader.cancel()
+            process.exit(0)
+          }
+        }
+      }
+      break
+    }
+
     case 'read': {
       const id = args[0]
       if (!id) die('Usage: cli read <message-id>')
@@ -120,6 +143,7 @@ async function main(): Promise<void> {
       console.log('  send "text"                    Send a text message to Telegram')
       console.log('  send-photo <path|url> ["cap"]  Send an image to Telegram')
       console.log('  inbox                          List unread messages from Telegram (JSON)')
+      console.log('  wait                           Block until a new message arrives, then print it')
       console.log('  read <id>                      Mark a message as read (delete from inbox)')
       console.log('  session                        Detailed session status (JSON)')
       console.log('\nEnvironment variables:')

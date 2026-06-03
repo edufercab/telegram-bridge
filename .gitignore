@@ -4,3 +4,4 @@ node_modules/
 dist/
 research/
 backlog.md
+server.log
